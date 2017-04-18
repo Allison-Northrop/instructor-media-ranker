@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :find_user
+  before_action :require_login, except: [:root, :index]
+
 
   def render_404
     # DPR: supposedly this will actually render a 404 page in production
@@ -16,9 +18,12 @@ class ApplicationController < ActionController::Base
   end
 
   def require_login
+    find_user
     if @login_user.nil?
-      flash[:message] = "You must login before viewing page"
+      #why is this flash not popping up? Everything else is working
+      flash[:status] = "You must login before viewing page"
       redirect_to root_path
     end
+
   end
-end 
+end

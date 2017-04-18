@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  before_action :require_login, except: [:root, :index, :create]
+
   def login_form
   end
 

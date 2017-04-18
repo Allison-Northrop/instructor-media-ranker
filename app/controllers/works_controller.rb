@@ -1,9 +1,9 @@
 class WorksController < ApplicationController
   # We should always be able to tell what category
   # of work we're dealing with
+  before_action :require_login, except: [:root, :index]
   before_action :category_from_url, only: [:index, :new, :create]
   before_action :category_from_work, except: [:root, :index, :new, :create]
-  before_action :require_login, except: [:index]
 
   def root
     @albums = Work.best_albums
@@ -81,7 +81,7 @@ class WorksController < ApplicationController
         status = :conflict
       end
     else
-      flash[:result_text] = "You must log in to do that"
+      flash[:result_text] = "You must log in FIRST"
       status = :unauthorized
     end
 
@@ -104,4 +104,12 @@ private
     render_404 unless @work
     @media_category = @work.category.downcase.pluralize
   end
+
+  # def require_login
+  #   find_user
+  #   if @login_user.nil?
+  #     flash[:message] = "You must login before viewing page"
+  #     # redirect_to root_path
+  #   end
+  # end
 end
