@@ -21,7 +21,8 @@ class ApplicationController < ActionController::Base
     find_user
     if @login_user.nil?
       #why is this flash not popping up? Everything else is working
-      flash[:status] = "You must login before viewing page"
+      flash[:status] = :failure
+      flash[:messages] = {"Login Error": ["you must log in before viewing content"]}
       redirect_to root_path
     end
 

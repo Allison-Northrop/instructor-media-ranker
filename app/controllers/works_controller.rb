@@ -40,6 +40,9 @@ class WorksController < ApplicationController
   end
 
   def edit
+    if @login_user != @work.owner
+       redirect_to work_path(@work.id) and return
+     end
   end
 
   def update
@@ -57,9 +60,11 @@ class WorksController < ApplicationController
   end
 
   def destroy
-    @work.destroy
-    flash[:status] = :success
-    flash[:result_text] = "Successfully destroyed #{@media_category.singularize} #{@work.id}"
+    if @login_user == @work.owner
+      @work.destroy
+      flash[:status] = :success
+      flash[:result_text] = "Successfully destroyed #{@media_category.singularize} #{@work.id}"
+    end
     redirect_to root_path
   end
 
